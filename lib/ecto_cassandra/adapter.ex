@@ -103,7 +103,12 @@ defmodule EctoCassandra.Adapter do
     case exec_and_log(repo, cql, options) do
       %CQL.Result.Rows{rows_count: count, rows: rows} ->
         {count, Enum.map(rows, &process_row(&1, fields, process))}
-      %CQL.Result.Void{} -> :ok
+      %CQL.Result.Void{} ->
+        if is_nil(fields) do
+          :ok
+        else
+          {0, []}
+        end
       error              -> raise error
     end
   end
