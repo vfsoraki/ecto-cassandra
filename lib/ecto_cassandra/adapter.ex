@@ -102,7 +102,7 @@ defmodule EctoCassandra.Adapter do
 
     case exec_and_log(repo, cql, options) do
       %CQL.Result.Rows{rows_count: count, rows: rows} ->
-        if is_nil(rows) do
+        if is_nil(fields) || is_nil(rows) do
           {0, []}
         else
           {count, Enum.map(rows, &process_row(&1, fields, process))}
